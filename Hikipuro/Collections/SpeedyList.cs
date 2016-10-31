@@ -134,8 +134,7 @@ namespace Hikipuro.Collections {
 		/// <param name="value"></param>
 		/// <returns></returns>
 		public int Add(object value) {
-			list.Add((T)value);
-			listIndex.Add((T)value, list.Count - 1);
+			Add((T)value);
 			return list.Count - 1;
 		}
 
@@ -145,7 +144,7 @@ namespace Hikipuro.Collections {
 		/// <param name="item"></param>
 		public void Add(T item) {
 			list.Add(item);
-			listIndex.Add(item, Count - 1);
+			listIndex.Add(item, list.Count - 1);
 		}
 
 		/// <summary>
@@ -215,7 +214,14 @@ namespace Hikipuro.Collections {
 		/// <param name="item"></param>
 		/// <returns></returns>
 		public int IndexOf(T item) {
-			return listIndex.IndexOf(item);
+			int index = listIndex.IndexOf(item);
+			/*
+			int iDebug = list.IndexOf(item);
+			if (index != iDebug) {
+				Console.WriteLine("!: " + index + ", " + iDebug);
+			}
+			//*/
+			return index;
 		}
 
 		/// <summary>
@@ -234,9 +240,10 @@ namespace Hikipuro.Collections {
 		/// <param name="item"></param>
 		public void Insert(int index, T item) {
 			list.Insert(index, item);
-			listIndex.Insert(index, item);
 			if (listIndex.history.Count > listIndex.HistoryThreshold) {
 				listIndex.Refresh();
+			} else {
+				listIndex.Insert(index, item);
 			}
 		}
 
