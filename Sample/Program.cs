@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace SpeedyList {
+namespace SpeedyList.Sample {
 	static class Program {
 		/// <summary>
 		/// アプリケーションのメイン エントリ ポイントです。

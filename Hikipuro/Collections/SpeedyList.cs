@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace Hikipuro.Collections {
 	/// <summary>
@@ -21,6 +22,15 @@ namespace Hikipuro.Collections {
 		/// リストのインデックス.
 		/// </summary>
 		SpeedyListIndex<T> listIndex;
+
+		/// <summary>
+		/// ICollection インターフェイスで使用する.
+		/// </summary>
+		Object syncRoot;
+
+		public int GetHistoryCount() {
+			return listIndex.history.Count;
+		}
 
 		/// <summary>
 		/// コンストラクタ.
@@ -85,7 +95,6 @@ namespace Hikipuro.Collections {
 
 		/// <summary>
 		/// IList インターフェイスで使用する.
-		/// TODO: 詳細を調べる.
 		/// </summary>
 		public bool IsFixedSize {
 			get { return false; }
@@ -93,29 +102,29 @@ namespace Hikipuro.Collections {
 
 		/// <summary>
 		/// IList インターフェイスで使用する.
-		/// TODO: 詳細を調べる.
 		/// </summary>
 		public bool IsReadOnly {
 			get { return false; }
 		}
 
 		/// <summary>
-		/// ICollection インターフェイスで使用する (未実装).
-		/// TODO: 実装する.
+		/// ICollection インターフェイスで使用する.
 		/// </summary>
 		public bool IsSynchronized {
-			get {
-				throw new NotImplementedException();
-			}
+			get { return false; }
 		}
 
 		/// <summary>
-		/// ICollection インターフェイスで使用する (未実装).
-		/// TODO: 実装する.
+		/// ICollection インターフェイスで使用する.
 		/// </summary>
 		public object SyncRoot {
 			get {
-				throw new NotImplementedException();
+				if (syncRoot == null) {
+					Interlocked.CompareExchange<Object>(
+						ref syncRoot, new Object(), null
+					);
+				}
+				return syncRoot;
 			}
 		}
 
@@ -226,6 +235,9 @@ namespace Hikipuro.Collections {
 		public void Insert(int index, T item) {
 			list.Insert(index, item);
 			listIndex.Insert(index, item);
+			if (listIndex.history.Count > listIndex.HistoryThreshold) {
+				listIndex.Refresh();
+			}
 		}
 
 		/// <summary>
@@ -246,7 +258,22 @@ namespace Hikipuro.Collections {
 				return false;
 			}
 			int index = listIndex.Remove(item);
+
+			/*
+			int iDebug = list.IndexOf(item);
+			if (index != iDebug) {
+				Console.WriteLine("!: " + index + ", " + iDebug);
+			}
+			//*/
+
+			//if (index < 0) {
+			//	return false;
+			//}
+
 			list.RemoveAt(index);
+			if (listIndex.history.Count > listIndex.HistoryThreshold) {
+				listIndex.Refresh();
+			}
 			return true;
 		}
 
@@ -255,6 +282,7 @@ namespace Hikipuro.Collections {
 		/// </summary>
 		/// <param name="index"></param>
 		public void RemoveAt(int index) {
+			Console.WriteLine("!: RemoveAt");
 			index = listIndex.Remove(list[index]);
 			list.RemoveAt(index);
 		}
