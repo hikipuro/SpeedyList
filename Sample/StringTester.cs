@@ -11,7 +11,7 @@ namespace SpeedyList.Sample {
 			for (int i = 0; i < 20000; i++) {
 				list.Add((i / 1).ToString());
 			}
-			Shuffle(list);
+			TestUtility.Shuffle(list);
 
 			SpeedyList<string> speedyList = new SpeedyList<string>(list);
 
@@ -21,11 +21,14 @@ namespace SpeedyList.Sample {
 			text.AppendLine("Generic List =====================");
 
 			long time = 0;
+			long start = 0;
+			long end = 0;
 
 			///*
 			time = Benchmark.Start(() => {
-				AddTest(new List<string>());
-			}, 2);
+				start = GC.GetTotalMemory(false);
+				end = AddTest(new List<string>());
+			}, 1);
 			text.AppendLine("AddTest: " + time + " ms");
 
 			time = Benchmark.Start(() => {
@@ -84,24 +87,13 @@ namespace SpeedyList.Sample {
 			return text.ToString();
 		}
 
-		public void Shuffle<T>(IList<T> list) {
-			Random random = new Random();
-			int n = list.Count;
-			while (n > 1) {
-				n--;
-				int k = random.Next(n + 1);
-				T tmp = list[k];
-				list[k] = list[n];
-				list[n] = tmp;
-			}
-		}
-
-		public void AddTest(IList list) {
+		public long AddTest(IList list) {
 			Random random = new Random();
 			int length = 100000;
 			for (int i = 0; i < length; i++) {
 				list.Add(random.Next(length).ToString());
 			}
+			return GC.GetTotalMemory(false);
 		}
 
 		public void InsertTest(IList list) {

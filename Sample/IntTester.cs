@@ -11,7 +11,7 @@ namespace SpeedyList.Sample {
 			for (int i = 0; i < 20000; i++) {
 				list.Add(i / 1);
 			}
-			Shuffle(list);
+			TestUtility.Shuffle(list);
 
 			SpeedyList<int> speedyList = new SpeedyList<int>(list);
 
@@ -21,32 +21,39 @@ namespace SpeedyList.Sample {
 			text.AppendLine("Generic List =====================");
 
 			long time = 0;
+			long start = 0;
+			long end = 0;
 
 			///*
 			time = Benchmark.Start(() => {
-				AddTest(new List<int>());
-			}, 2);
-			text.AppendLine("AddTest: " + time + " ms");
-
-			time = Benchmark.Start(() => {
-				InsertTest(new List<int>());
-			}, 2);
-			text.AppendLine("InsertTest: " + time + " ms");
-
-			time = Benchmark.Start(() => {
-				IndexOfTest(list);
-			}, 2);
-			text.AppendLine("IndexOfTest: " + time + " ms");
-
-			time = Benchmark.Start(() => {
-				ContainsTest(list);
-			}, 2);
-			text.AppendLine("ContainsTest: " + time + " ms");
-
-			time = Benchmark.Start(() => {
-				RemoveTest(list);
+				start = GC.GetTotalMemory(false);
+				end = AddTest(new List<int>());
 			}, 1);
-			text.AppendLine("RemoveTest: " + time + " ms");
+			text.Append(TestUtility.FormatResult("AddTest", time, end - start));
+
+			time = Benchmark.Start(() => {
+				start = GC.GetTotalMemory(false);
+				end = InsertTest(new List<int>());
+			}, 1);
+			text.Append(TestUtility.FormatResult("InsertTest", time, end - start));
+
+			time = Benchmark.Start(() => {
+				start = GC.GetTotalMemory(false);
+				end = IndexOfTest(list);
+			}, 1);
+			text.Append(TestUtility.FormatResult("IndexOfTest", time, end - start));
+
+			time = Benchmark.Start(() => {
+				start = GC.GetTotalMemory(false);
+				end = ContainsTest(list);
+			}, 1);
+			text.Append(TestUtility.FormatResult("ContainsTest", time, end - start));
+
+			time = Benchmark.Start(() => {
+				start = GC.GetTotalMemory(false);
+				end = RemoveTest(list);
+			}, 1);
+			text.Append(TestUtility.FormatResult("RemoveTest", time, end - start));
 			//*/
 
 
@@ -54,71 +61,68 @@ namespace SpeedyList.Sample {
 			text.AppendLine("SpeedyList =======================");
 
 			time = Benchmark.Start(() => {
-				AddTest(new SpeedyList<int>());
-			}, 2);
-			text.AppendLine("AddTest: " + time + " ms");
-
-			time = Benchmark.Start(() => {
-				InsertTest(new SpeedyList<int>());
-			}, 2);
-			text.AppendLine("InsertTest: " + time + " ms");
-
-			time = Benchmark.Start(() => {
-				IndexOfTest(speedyList);
-			}, 2);
-			text.AppendLine("IndexOfTest: " + time + " ms");
-
-			time = Benchmark.Start(() => {
-				ContainsTest(speedyList);
-			}, 2);
-			text.AppendLine("ContainsTest: " + time + " ms");
-
-			time = Benchmark.Start(() => {
-				RemoveTest(speedyList);
+				start = GC.GetTotalMemory(false);
+				end = AddTest(new SpeedyList<int>());
 			}, 1);
-			text.AppendLine("RemoveTest: " + time + " ms");
+			text.Append(TestUtility.FormatResult("AddTest", time, end - start));
+
+			time = Benchmark.Start(() => {
+				start = GC.GetTotalMemory(false);
+				end = InsertTest(new SpeedyList<int>());
+			}, 1);
+			text.Append(TestUtility.FormatResult("InsertTest", time, end - start));
+
+			time = Benchmark.Start(() => {
+				start = GC.GetTotalMemory(false);
+				end = IndexOfTest(speedyList);
+			}, 1);
+			text.Append(TestUtility.FormatResult("IndexOfTest", time, end - start));
+
+			time = Benchmark.Start(() => {
+				start = GC.GetTotalMemory(false);
+				end = ContainsTest(speedyList);
+			}, 1);
+			text.Append(TestUtility.FormatResult("ContainsTest", time, end - start));
+
+			time = Benchmark.Start(() => {
+				start = GC.GetTotalMemory(false);
+				end = RemoveTest(speedyList);
+			}, 1);
+			text.Append(TestUtility.FormatResult("RemoveTest", time, end - start));
 
 			return text.ToString();
 		}
 
-		public void Shuffle<T>(IList<T> list) {
-			Random random = new Random();
-			int n = list.Count;
-			while (n > 1) {
-				n--;
-				int k = random.Next(n + 1);
-				T tmp = list[k];
-				list[k] = list[n];
-				list[n] = tmp;
-			}
-		}
-
-		public void AddTest(IList list) {
+		public long AddTest(IList list) {
 			Random random = new Random((int)DateTime.Now.Ticks);
 			int length = 100000;
 			for (int i = 0; i < length; i++) {
 				list.Add(random.Next(length));
+				//list.Add(i);
 			}
+			return GC.GetTotalMemory(false);
 		}
 
-		public void InsertTest(IList list) {
+		public long InsertTest(IList list) {
 			Random random = new Random((int)DateTime.Now.Ticks);
 			for (int i = 0; i < 20000; i++) {
 				int index = random.Next(list.Count);
 				list.Insert(index, i);
 			}
+			return GC.GetTotalMemory(false);
 		}
 
-		public void IndexOfTest(IList list) {
+		public long IndexOfTest(IList list) {
 			long total = 0;
 			int length = list.Count;
 			for (int i = 0; i < length; i++) {
 				total += list.IndexOf(i);
 			}
 			Console.WriteLine("IndexOfTest total: " + total);
+			return GC.GetTotalMemory(false);
 		}
 
-		public void ContainsTest(IList list) {
+		public long ContainsTest(IList list) {
 			long total = 0;
 			for (int i = 0; i < list.Count; i++) {
 				if (list.Contains(i)) {
@@ -126,15 +130,17 @@ namespace SpeedyList.Sample {
 				}
 			}
 			Console.WriteLine("ContainsTest total: " + total);
+			return GC.GetTotalMemory(false);
 		}
 
-		public void RemoveTest(IList list) {
+		public long RemoveTest(IList list) {
 			Random random = new Random((int)DateTime.Now.Ticks);
 			int length = list.Count;
 			for (int i = 0; i < length; i++) {
 				list.Remove(i);
 			}
 			Console.WriteLine("list.count: " + list.Count);
+			return GC.GetTotalMemory(false);
 		}
 	}
 }
