@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="SpeedyListIndexTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SpeedyListTest.cs" />
     <Compile Include="TestUtility.cs" />
   </ItemGroup>
   <ItemGroup>

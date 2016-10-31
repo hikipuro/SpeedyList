@@ -26,11 +26,7 @@ namespace Hikipuro.Collections {
 		/// <summary>
 		/// ICollection インターフェイスで使用する.
 		/// </summary>
-		Object syncRoot;
-
-		public int GetHistoryCount() {
-			return listIndex.history.Count;
-		}
+		object syncRoot;
 
 		/// <summary>
 		/// コンストラクタ.
@@ -120,8 +116,8 @@ namespace Hikipuro.Collections {
 		public object SyncRoot {
 			get {
 				if (syncRoot == null) {
-					Interlocked.CompareExchange<Object>(
-						ref syncRoot, new Object(), null
+					Interlocked.CompareExchange<object>(
+						ref syncRoot, new object(), null
 					);
 				}
 				return syncRoot;
@@ -240,7 +236,7 @@ namespace Hikipuro.Collections {
 		/// <param name="item"></param>
 		public void Insert(int index, T item) {
 			list.Insert(index, item);
-			if (listIndex.history.Count > listIndex.HistoryThreshold) {
+			if (listIndex.HistoryCount > listIndex.HistoryThreshold) {
 				listIndex.Refresh();
 			} else {
 				listIndex.Insert(index, item);
@@ -278,7 +274,7 @@ namespace Hikipuro.Collections {
 			//}
 
 			list.RemoveAt(index);
-			if (listIndex.history.Count > listIndex.HistoryThreshold) {
+			if (listIndex.HistoryCount > listIndex.HistoryThreshold) {
 				listIndex.Refresh();
 			}
 			return true;

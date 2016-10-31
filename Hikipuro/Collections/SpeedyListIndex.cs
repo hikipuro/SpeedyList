@@ -74,6 +74,9 @@ namespace Hikipuro.Collections {
 		/// 扱う要素の数によって, この値は調整した方が良さそう.
 		/// </summary>
 		public int HistoryThreshold = 1000;
+		//public int HistoryThreshold {
+		//	get { return target.Count / 10; }
+		//}
 
 		/// <summary>
 		/// 処理対象のリスト.
@@ -93,12 +96,19 @@ namespace Hikipuro.Collections {
 		/// <summary>
 		/// 操作履歴.
 		/// </summary>
-		public List<HistoryItem> history;
+		List<HistoryItem> history;
 
 		/// <summary>
 		/// 操作履歴の次の位置.
 		/// </summary>
 		int position;
+
+		/// <summary>
+		/// 操作履歴の個数.
+		/// </summary>
+		public int HistoryCount {
+			get { return position; }
+		}
 
 		/// <summary>
 		/// コンストラクタ.
