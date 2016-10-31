@@ -69,8 +69,10 @@
     </Compile>
     <Compile Include="Hikipuro\Collections\SpeedyList.cs" />
     <Compile Include="Hikipuro\Collections\SpeedyListIndex.cs" />
+    <Compile Include="Sample\IntTester.cs" />
     <Compile Include="Sample\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sample\StringTester.cs" />
     <EmbeddedResource Include="Sample\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

@@ -478,6 +478,9 @@ namespace UnitTest {
 					int index1 = list.IndexOf(i);
 					int index2 = speedyList.IndexOf(i);
 					Assert.AreEqual(index1, index2);
+					bool contains1 = list.Contains(i);
+					bool contains2 = speedyList.Contains(i);
+					Assert.AreEqual(contains1, contains2);
 				}
 
 				for (int i = 0; i < LoopCount / 2; i++) {
@@ -502,7 +505,7 @@ namespace UnitTest {
 				var list = new List<int>();
 				var speedyList = new SpeedyList<int>();
 
-				for (int i = 0; i < 1000; i++) {
+				for (int i = 0; i < LoopCount + 1; i++) {
 					list.Add(i);
 					speedyList.Add(i);
 				}
@@ -543,6 +546,9 @@ namespace UnitTest {
 					int index1 = list.IndexOf(i);
 					int index2 = speedyList.IndexOf(i);
 					Assert.AreEqual(index1, index2);
+					bool contains1 = list.Contains(i);
+					bool contains2 = speedyList.Contains(i);
+					Assert.AreEqual(contains1, contains2);
 				}
 			}
 		}
@@ -560,7 +566,7 @@ namespace UnitTest {
 				var list = new List<string>();
 				var speedyList = new SpeedyList<string>();
 
-				for (int i = 0; i < 1000; i++) {
+				for (int i = 0; i < LoopCount + 1; i++) {
 					var value = i.ToString();
 					list.Add(value);
 					speedyList.Add(value);
@@ -611,6 +617,9 @@ namespace UnitTest {
 					int index1 = list.IndexOf(value);
 					int index2 = speedyList.IndexOf(value);
 					Assert.AreEqual(index1, index2);
+					bool contains1 = list.Contains(value);
+					bool contains2 = speedyList.Contains(value);
+					Assert.AreEqual(contains1, contains2);
 				}
 			}
 		}
@@ -621,29 +630,29 @@ namespace UnitTest {
 		[TestMethod, TestCategory("SpeedyList")]
 		public void ComplexTestClass() {
 			const int TestCount = 20;
-			const int LoopCount = 999;
 			var random = new Random();
 
 			for (int n = 0; n < TestCount; n++) {
+				int loopCount = 500 + random.Next(1000);
 				var list = new List<TestUserClass>();
 				var speedyList = new SpeedyList<TestUserClass>();
 
-				for (int i = 0; i < 1000; i++) {
+				for (int i = 0; i < loopCount + 1; i++) {
 					var value = new TestUserClass();
 					value.Name = i.ToString();
-					value.Value = random.Next(LoopCount);
+					value.Value = random.Next(loopCount);
 					list.Add(value);
 					speedyList.Add(value);
 				}
 				Assert.AreNotEqual(0, list.Count);
 				Assert.AreEqual(list.Count, speedyList.Count);
 
-				for (int i = 0; i < LoopCount; i++) {
+				for (int i = 0; i < loopCount; i++) {
 					int method = random.Next(6);
 					int index = random.Next(list.Count);
 					var value = new TestUserClass();
 					value.Name = i.ToString();
-					value.Value = random.Next(LoopCount);
+					value.Value = random.Next(loopCount);
 					switch (method) {
 					case 0:
 						list.Add(value);
@@ -681,10 +690,13 @@ namespace UnitTest {
 					Assert.AreEqual(list[i], speedyList[i]);
 					var value = new TestUserClass();
 					value.Name = i.ToString();
-					value.Value = random.Next(LoopCount);
+					value.Value = random.Next(loopCount);
 					int index1 = list.IndexOf(value);
 					int index2 = speedyList.IndexOf(value);
 					Assert.AreEqual(index1, index2);
+					bool contains1 = list.Contains(value);
+					bool contains2 = speedyList.Contains(value);
+					Assert.AreEqual(contains1, contains2);
 				}
 			}
 		}
