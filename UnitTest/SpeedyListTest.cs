@@ -124,7 +124,7 @@ namespace UnitTest {
 			var random = new Random();
 
 			for (int i = 0; i < LoopCount; i++) {
-				TestUserClass value = new TestUserClass();
+				var value = new TestUserClass();
 				value.Name = i.ToString();
 				value.Value = random.Next(LoopCount);
 				list.Add(value);
@@ -478,7 +478,213 @@ namespace UnitTest {
 					int index1 = list.IndexOf(i);
 					int index2 = speedyList.IndexOf(i);
 					Assert.AreEqual(index1, index2);
-					Console.WriteLine("index1: " + index1);
+				}
+
+				for (int i = 0; i < LoopCount / 2; i++) {
+					int index = random.Next(list.Count);
+					int index1 = list.IndexOf(index);
+					int index2 = speedyList.IndexOf(index);
+					Assert.AreEqual(index1, index2);
+				}
+			}
+		}
+
+		/// <summary>
+		/// int 型の複雑な状況のテスト.
+		/// </summary>
+		[TestMethod, TestCategory("SpeedyList")]
+		public void ComplexTestInt() {
+			const int TestCount = 20;
+			const int LoopCount = 999;
+			var random = new Random();
+
+			for (int n = 0; n < TestCount; n++) {
+				var list = new List<int>();
+				var speedyList = new SpeedyList<int>();
+
+				for (int i = 0; i < 1000; i++) {
+					list.Add(i);
+					speedyList.Add(i);
+				}
+				Assert.AreNotEqual(0, list.Count);
+				Assert.AreEqual(list.Count, speedyList.Count);
+
+				for (int i = 0; i < LoopCount; i++) {
+					int method = random.Next(4);
+					int index = random.Next(list.Count);
+					int value = random.Next(LoopCount);
+					switch (method) {
+					case 0:
+						list.Add(value);
+						speedyList.Add(value);
+						break;
+					case 1:
+						list.Insert(index, value);
+						speedyList.Insert(index, value);
+						break;
+					case 2:
+						list.Remove(value);
+						speedyList.Remove(value);
+						break;
+					case 3:
+						list.RemoveAt(index);
+						speedyList.RemoveAt(index);
+						break;
+					default:
+						Assert.IsTrue(false);
+						break;
+					}
+				}
+				Assert.AreNotEqual(0, list.Count);
+				Assert.AreEqual(list.Count, speedyList.Count);
+
+				for (int i = 0; i < list.Count; i++) {
+					Assert.AreEqual(list[i], speedyList[i]);
+					int index1 = list.IndexOf(i);
+					int index2 = speedyList.IndexOf(i);
+					Assert.AreEqual(index1, index2);
+				}
+			}
+		}
+
+		/// <summary>
+		/// string 型の複雑な状況のテスト.
+		/// </summary>
+		[TestMethod, TestCategory("SpeedyList")]
+		public void ComplexTestString() {
+			const int TestCount = 20;
+			const int LoopCount = 999;
+			var random = new Random();
+
+			for (int n = 0; n < TestCount; n++) {
+				var list = new List<string>();
+				var speedyList = new SpeedyList<string>();
+
+				for (int i = 0; i < 1000; i++) {
+					var value = i.ToString();
+					list.Add(value);
+					speedyList.Add(value);
+				}
+				Assert.AreNotEqual(0, list.Count);
+				Assert.AreEqual(list.Count, speedyList.Count);
+
+				for (int i = 0; i < LoopCount; i++) {
+					int method = random.Next(6);
+					int index = random.Next(list.Count);
+					var value = random.Next(LoopCount).ToString();
+					switch (method) {
+					case 0:
+						list.Add(value);
+						speedyList.Add(value);
+						break;
+					case 1:
+						list.Insert(index, value);
+						speedyList.Insert(index, value);
+						break;
+					case 2:
+						list.Remove(value);
+						speedyList.Remove(value);
+						break;
+					case 3:
+						list.RemoveAt(index);
+						speedyList.RemoveAt(index);
+						break;
+					case 4:
+						list.Insert(index, null);
+						speedyList.Insert(index, null);
+						break;
+					case 5:
+						list.Remove(null);
+						speedyList.Remove(null);
+						break;
+					default:
+						Assert.IsTrue(false);
+						break;
+					}
+				}
+				Assert.AreNotEqual(0, list.Count);
+				Assert.AreEqual(list.Count, speedyList.Count);
+
+				for (int i = 0; i < list.Count; i++) {
+					Assert.AreEqual(list[i], speedyList[i]);
+					var value = i.ToString();
+					int index1 = list.IndexOf(value);
+					int index2 = speedyList.IndexOf(value);
+					Assert.AreEqual(index1, index2);
+				}
+			}
+		}
+
+		/// <summary>
+		/// ユーザ定義クラスの複雑な状況のテスト.
+		/// </summary>
+		[TestMethod, TestCategory("SpeedyList")]
+		public void ComplexTestClass() {
+			const int TestCount = 20;
+			const int LoopCount = 999;
+			var random = new Random();
+
+			for (int n = 0; n < TestCount; n++) {
+				var list = new List<TestUserClass>();
+				var speedyList = new SpeedyList<TestUserClass>();
+
+				for (int i = 0; i < 1000; i++) {
+					var value = new TestUserClass();
+					value.Name = i.ToString();
+					value.Value = random.Next(LoopCount);
+					list.Add(value);
+					speedyList.Add(value);
+				}
+				Assert.AreNotEqual(0, list.Count);
+				Assert.AreEqual(list.Count, speedyList.Count);
+
+				for (int i = 0; i < LoopCount; i++) {
+					int method = random.Next(6);
+					int index = random.Next(list.Count);
+					var value = new TestUserClass();
+					value.Name = i.ToString();
+					value.Value = random.Next(LoopCount);
+					switch (method) {
+					case 0:
+						list.Add(value);
+						speedyList.Add(value);
+						break;
+					case 1:
+						list.Insert(index, value);
+						speedyList.Insert(index, value);
+						break;
+					case 2:
+						list.Remove(value);
+						speedyList.Remove(value);
+						break;
+					case 3:
+						list.RemoveAt(index);
+						speedyList.RemoveAt(index);
+						break;
+					case 4:
+						list.Insert(index, null);
+						speedyList.Insert(index, null);
+						break;
+					case 5:
+						list.Remove(null);
+						speedyList.Remove(null);
+						break;
+					default:
+						Assert.IsTrue(false);
+						break;
+					}
+				}
+				Assert.AreNotEqual(0, list.Count);
+				Assert.AreEqual(list.Count, speedyList.Count);
+
+				for (int i = 0; i < list.Count; i++) {
+					Assert.AreEqual(list[i], speedyList[i]);
+					var value = new TestUserClass();
+					value.Name = i.ToString();
+					value.Value = random.Next(LoopCount);
+					int index1 = list.IndexOf(value);
+					int index2 = speedyList.IndexOf(value);
+					Assert.AreEqual(index1, index2);
 				}
 			}
 		}

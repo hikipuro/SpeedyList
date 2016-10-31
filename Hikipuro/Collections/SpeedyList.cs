@@ -285,9 +285,13 @@ namespace Hikipuro.Collections {
 		/// </summary>
 		/// <param name="index"></param>
 		public void RemoveAt(int index) {
-			Console.WriteLine("!: RemoveAt");
-			index = listIndex.Remove(list[index]);
+			T item = list[index];
 			list.RemoveAt(index);
+			if (listIndex.HistoryCount > listIndex.HistoryThreshold) {
+				listIndex.Refresh();
+			} else {
+				listIndex.RemoveAt(item, index);
+			}
 		}
 
 		/// <summary>

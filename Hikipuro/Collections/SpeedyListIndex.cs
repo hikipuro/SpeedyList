@@ -275,6 +275,45 @@ namespace Hikipuro.Collections {
 		}
 
 		/// <summary>
+		/// 要素を取り除く.
+		/// </summary>
+		/// <param name="item"></param>
+		/// <param name="index"></param>
+		/// <returns></returns>
+		public void RemoveAt(T item, int index) {
+			// 要素が null の場合
+			if (item == null) {
+				RemoveAtNullItem(index);
+				return;
+			}
+
+			// null 以外の場合
+			if (indices.ContainsKey(item) == false) {
+				return;
+			}
+			List<IndexItem> list = indices[item];
+			NormalizeList(list);
+
+			int listIndex = -1;
+			for (int i = 0; i < list.Count; i++) {
+				IndexItem indexItem = list[i];
+				if (indexItem.Index == index) {
+					listIndex = i;
+					break;
+				}
+			}
+			if (listIndex < 0) {
+				return;
+			}
+			list.RemoveAt(listIndex);
+			if (list.Count <= 0) {
+				indices.Remove(item);
+			}
+
+			AddHistory(index + 1, -1);
+		}
+
+		/// <summary>
 		/// 要素が null の場合の Remove().
 		/// </summary>
 		/// <returns></returns>
@@ -289,6 +328,32 @@ namespace Hikipuro.Collections {
 			AddHistory(index + 1, -1);
 			return index;
 		}
+
+		/// <summary>
+		/// 要素が null の場合の RemoveAt().
+		/// </summary>
+		/// <param name="index"></param>
+		/// <returns></returns>
+		private void RemoveAtNullItem(int index) {
+			if (nullIndex.Count <= 0) {
+				return;
+			}
+			NormalizeList(nullIndex);
+			int listIndex = -1;
+			for (int i = 0; i < nullIndex.Count; i++) {
+				IndexItem indexItem = nullIndex[i];
+				if (indexItem.Index == index) {
+					listIndex = i;
+					break;
+				}
+			}
+			if (listIndex < 0) {
+				return;
+			}
+			nullIndex.RemoveAt(listIndex);
+			AddHistory(index + 1, -1);
+		}
+
 
 		/// <summary>
 		/// 操作履歴を追加する.
