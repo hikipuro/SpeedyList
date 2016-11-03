@@ -26,31 +26,31 @@ namespace SpeedyList.Sample {
 
 			///*
 			time = Benchmark.Start(() => {
-				start = GC.GetTotalMemory(false);
+				start = GC.GetTotalMemory(true);
 				end = AddTest(new List<int>());
 			}, 1);
 			text.Append(TestUtility.FormatResult("AddTest", time, end - start));
 
 			time = Benchmark.Start(() => {
-				start = GC.GetTotalMemory(false);
+				start = GC.GetTotalMemory(true);
 				end = InsertTest(new List<int>());
 			}, 1);
 			text.Append(TestUtility.FormatResult("InsertTest", time, end - start));
 
 			time = Benchmark.Start(() => {
-				start = GC.GetTotalMemory(false);
+				start = GC.GetTotalMemory(true);
 				end = IndexOfTest(list);
 			}, 1);
 			text.Append(TestUtility.FormatResult("IndexOfTest", time, end - start));
 
 			time = Benchmark.Start(() => {
-				start = GC.GetTotalMemory(false);
+				start = GC.GetTotalMemory(true);
 				end = ContainsTest(list);
 			}, 1);
 			text.Append(TestUtility.FormatResult("ContainsTest", time, end - start));
 
 			time = Benchmark.Start(() => {
-				start = GC.GetTotalMemory(false);
+				start = GC.GetTotalMemory(true);
 				end = RemoveTest(list);
 			}, 1);
 			text.Append(TestUtility.FormatResult("RemoveTest", time, end - start));
@@ -61,31 +61,31 @@ namespace SpeedyList.Sample {
 			text.AppendLine("SpeedyList =======================");
 
 			time = Benchmark.Start(() => {
-				start = GC.GetTotalMemory(false);
+				start = GC.GetTotalMemory(true);
 				end = AddTest(new SpeedyList<int>());
 			}, 1);
 			text.Append(TestUtility.FormatResult("AddTest", time, end - start));
 
 			time = Benchmark.Start(() => {
-				start = GC.GetTotalMemory(false);
+				start = GC.GetTotalMemory(true);
 				end = InsertTest(new SpeedyList<int>());
 			}, 1);
 			text.Append(TestUtility.FormatResult("InsertTest", time, end - start));
 
 			time = Benchmark.Start(() => {
-				start = GC.GetTotalMemory(false);
+				start = GC.GetTotalMemory(true);
 				end = IndexOfTest(speedyList);
 			}, 1);
 			text.Append(TestUtility.FormatResult("IndexOfTest", time, end - start));
 
 			time = Benchmark.Start(() => {
-				start = GC.GetTotalMemory(false);
+				start = GC.GetTotalMemory(true);
 				end = ContainsTest(speedyList);
 			}, 1);
 			text.Append(TestUtility.FormatResult("ContainsTest", time, end - start));
 
 			time = Benchmark.Start(() => {
-				start = GC.GetTotalMemory(false);
+				start = GC.GetTotalMemory(true);
 				end = RemoveTest(speedyList);
 			}, 1);
 			text.Append(TestUtility.FormatResult("RemoveTest", time, end - start));
@@ -100,7 +100,9 @@ namespace SpeedyList.Sample {
 				list.Add(random.Next(length));
 				//list.Add(i);
 			}
-			return GC.GetTotalMemory(false);
+			long memory = GC.GetTotalMemory(true);
+			GC.KeepAlive(list);
+			return memory;
 		}
 
 		public long InsertTest(IList list) {
@@ -109,7 +111,9 @@ namespace SpeedyList.Sample {
 				int index = random.Next(list.Count);
 				list.Insert(index, i);
 			}
-			return GC.GetTotalMemory(false);
+			long memory = GC.GetTotalMemory(true);
+			GC.KeepAlive(list);
+			return memory;
 		}
 
 		public long IndexOfTest(IList list) {
@@ -119,7 +123,9 @@ namespace SpeedyList.Sample {
 				total += list.IndexOf(i);
 			}
 			Console.WriteLine("IndexOfTest total: " + total);
-			return GC.GetTotalMemory(false);
+			long memory = GC.GetTotalMemory(true);
+			GC.KeepAlive(list);
+			return memory;
 		}
 
 		public long ContainsTest(IList list) {
@@ -130,17 +136,21 @@ namespace SpeedyList.Sample {
 				}
 			}
 			Console.WriteLine("ContainsTest total: " + total);
-			return GC.GetTotalMemory(false);
+			long memory = GC.GetTotalMemory(true);
+			GC.KeepAlive(list);
+			return memory;
 		}
 
 		public long RemoveTest(IList list) {
-			Random random = new Random((int)DateTime.Now.Ticks);
+			//Random random = new Random((int)DateTime.Now.Ticks);
 			int length = list.Count;
 			for (int i = 0; i < length; i++) {
 				list.Remove(i);
 			}
 			Console.WriteLine("list.count: " + list.Count);
-			return GC.GetTotalMemory(false);
+			long memory = GC.GetTotalMemory(true);
+			GC.KeepAlive(list);
+			return memory;
 		}
 	}
 }

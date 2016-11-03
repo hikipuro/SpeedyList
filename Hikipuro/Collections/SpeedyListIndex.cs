@@ -295,7 +295,8 @@ namespace Hikipuro.Collections {
 			NormalizeList(list);
 
 			int listIndex = -1;
-			for (int i = 0; i < list.Count; i++) {
+			int length = list.Count;
+			for (int i = 0; i < length; i++) {
 				IndexItem indexItem = list[i];
 				if (indexItem.Index == index) {
 					listIndex = i;
@@ -377,12 +378,19 @@ namespace Hikipuro.Collections {
 		/// </summary>
 		/// <param name="list"></param>
 		private void NormalizeList(List<IndexItem> list) {
+			int count = 0;
 			foreach (IndexItem item in list) {
+				if (item.InsertedAt == position) {
+					continue;
+				}
+				count++;
 				int index = GetIndex(item);
 				item.Index = index;
 				item.InsertedAt = position;
 			}
-			list.Sort();
+			if (count > 0) {
+				list.Sort();
+			}
 		}
 
 		/// <summary>
@@ -392,7 +400,8 @@ namespace Hikipuro.Collections {
 		/// <returns></returns>
 		private int GetIndex(IndexItem item) {
 			int index = item.Index;
-			for (int i = item.InsertedAt; i < history.Count; i++) {
+			int length = history.Count;
+			for (int i = item.InsertedAt; i < length; i++) {
 				HistoryItem historyItem = history[i];
 				if (index >= historyItem.Index) {
 					index += historyItem.Move;
