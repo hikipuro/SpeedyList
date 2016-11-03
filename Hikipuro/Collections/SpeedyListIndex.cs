@@ -205,7 +205,8 @@ namespace Hikipuro.Collections {
 				if (nullIndex.Count <= 0) {
 					return -1;
 				}
-				return GetIndex(nullIndex[0]);
+				NormalizeList(nullIndex);
+				return nullIndex[0].Index;
 			}
 
 			// null 以外の場合
@@ -214,10 +215,138 @@ namespace Hikipuro.Collections {
 			}
 			List<IndexItem> list = indices[item];
 			NormalizeList(list);
-			//if (list.Count <= 0) {
-			//	return -1;
-			//}
-			return GetIndex(list[0]);
+			return list[0].Index;
+		}
+
+		/// <summary>
+		/// 要素のインデックス番号を取得する.
+		/// 見つからなかった場合は -1 を返す.
+		/// </summary>
+		/// <param name="item"></param>
+		/// <param name="index"></param>
+		/// <returns></returns>
+		public int IndexOf(T item, int index) {
+			// null の場合
+			if (item == null) {
+				if (nullIndex.Count <= 0) {
+					return -1;
+				}
+				NormalizeList(nullIndex);
+				return FindIndex(nullIndex, index);
+			}
+
+			// null 以外の場合
+			if (indices.ContainsKey(item) == false) {
+				return -1;
+			}
+			List<IndexItem> list = indices[item];
+			NormalizeList(list);
+			return FindIndex(list, index);
+		}
+
+		/// <summary>
+		/// 要素のインデックス番号を取得する.
+		/// 見つからなかった場合は -1 を返す.
+		/// </summary>
+		/// <param name="item"></param>
+		/// <param name="index"></param>
+		/// <param name="count"></param>
+		/// <returns></returns>
+		public int IndexOf(T item, int index, int count) {
+			// null の場合
+			if (item == null) {
+				if (nullIndex.Count <= 0) {
+					return -1;
+				}
+				NormalizeList(nullIndex);
+				return FindIndex(nullIndex, index, count);
+			}
+
+			// null 以外の場合
+			if (indices.ContainsKey(item) == false) {
+				return -1;
+			}
+			List<IndexItem> list = indices[item];
+			NormalizeList(list);
+			return FindIndex(list, index, count);
+		}
+
+		/// <summary>
+		/// 要素のインデックス番号を取得する.
+		/// 見つからなかった場合は -1 を返す.
+		/// </summary>
+		/// <param name="item"></param>
+		/// <returns></returns>
+		public int LastIndexOf(T item) {
+			// null の場合
+			if (item == null) {
+				if (nullIndex.Count <= 0) {
+					return -1;
+				}
+				NormalizeList(nullIndex);
+				return nullIndex[nullIndex.Count - 1].Index;
+			}
+
+			// null 以外の場合
+			if (indices.ContainsKey(item) == false) {
+				return -1;
+			}
+			List<IndexItem> list = indices[item];
+			NormalizeList(list);
+			return list[list.Count - 1].Index;
+		}
+
+		/// <summary>
+		/// 要素のインデックス番号を取得する.
+		/// 見つからなかった場合は -1 を返す.
+		/// </summary>
+		/// <param name="item"></param>
+		/// <param name="index"></param>
+		/// <returns></returns>
+		public int LastIndexOf(T item, int index) {
+			// null の場合
+			if (item == null) {
+				if (nullIndex.Count <= 0) {
+					return -1;
+				}
+				NormalizeList(nullIndex);
+				return FindLastIndex(nullIndex, index);
+			}
+
+			// null 以外の場合
+			if (indices.ContainsKey(item) == false) {
+				return -1;
+			}
+			List<IndexItem> list = indices[item];
+			NormalizeList(list);
+			return FindLastIndex(list, index);
+		}
+
+		/// <summary>
+		/// 要素のインデックス番号を取得する.
+		/// 見つからなかった場合は -1 を返す.
+		/// </summary>
+		/// <param name="item"></param>
+		/// <param name="index"></param>
+		/// <param name="count"></param>
+		/// <returns></returns>
+		public int LastIndexOf(T item, int index, int count) {
+			// null の場合
+			if (item == null) {
+				if (nullIndex.Count <= 0) {
+					return -1;
+				}
+				NormalizeList(nullIndex);
+				return FindLastIndex(nullIndex, index, count);
+			}
+
+			// null 以外の場合
+			if (indices.ContainsKey(item) == false) {
+				return -1;
+			}
+			List<IndexItem> list = indices[item];
+			NormalizeList(list);
+			return FindLastIndex(list, index, count);
 		}
 
 		/// <summary>
@@ -408,6 +537,76 @@ namespace Hikipuro.Collections {
 				}
 			}
 			return index;
+		}
+
+		/// <summary>
+		/// インデックスのリストから, 指定されたインデックス番号以上のインデックス番号を探す.
+		/// 見つからなかった場合 -1 を返す.
+		/// </summary>
+		/// <param name="list"></param>
+		/// <param name="index"></param>
+		/// <returns></returns>
+		private int FindIndex(List<IndexItem> list, int index) {
+			foreach (IndexItem item in list) {
+				if (item.Index >= index) {
+					return item.Index;
+				}
+			}
+			return -1;
+		}
+
+		/// <summary>
+		/// インデックスのリストから, 指定されたインデックス番号以上のインデックス番号を探す.
+		/// 見つからなかった場合 -1 を返す.
+		/// </summary>
+		/// <param name="list"></param>
+		/// <param name="index"></param>
+		/// <param name="count"></param>
+		/// <returns></returns>
+		private int FindIndex(List<IndexItem> list, int index, int count) {
+			foreach (IndexItem item in list) {
+				int i = item.Index;
+				if (i >= index && i < index + count) {
+					return item.Index;
+				}
+			}
+			return -1;
+		}
+
+		/// <summary>
+		/// インデックスのリストから, 指定されたインデックス番号以上のインデックス番号を探す.
+		/// 見つからなかった場合 -1 を返す.
+		/// </summary>
+		/// <param name="list"></param>
+		/// <param name="index"></param>
+		/// <returns></returns>
+		private int FindLastIndex(List<IndexItem> list, int index) {
+			for (int i = list.Count - 1; i >= 0; i--) {
+				IndexItem item = list[i];
+				if (item.Index <= index) {
+					return item.Index;
+				}
+			}
+			return -1;
+		}
+
+		/// <summary>
+		/// インデックスのリストから, 指定されたインデックス番号以上のインデックス番号を探す.
+		/// 見つからなかった場合 -1 を返す.
+		/// </summary>
+		/// <param name="list"></param>
+		/// <param name="index"></param>
+		/// <param name="count"></param>
+		/// <returns></returns>
+		private int FindLastIndex(List<IndexItem> list, int index, int count) {
+			for (int i = list.Count - 1; i >= 0; i--) {
+				IndexItem item = list[i];
+				int itemIndex = item.Index;
+				if (itemIndex <= index && itemIndex > index - count) {
+					return item.Index;
+				}
+			}
+			return -1;
 		}
 
 		/*

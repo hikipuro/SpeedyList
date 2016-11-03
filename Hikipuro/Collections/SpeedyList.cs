@@ -133,9 +133,9 @@ namespace Hikipuro.Collections {
 		}
 
 		/// <summary>
-		/// 要素を追加する (IList インターフェイス).
+		/// <see cref="T:Hikipuro.Collections.SpeedyList`1"/> の末尾にオブジェクトを追加します。
 		/// </summary>
-		/// <param name="value"></param>
+		/// <param name="value"><see cref="T:Hikipuro.Collections.SpeedyList`1"/> の末尾に追加するオブジェクト。参照型の場合、null の値を使用できます。</param>
 		/// <returns></returns>
 		public int Add(object value) {
 			Add((T)value);
@@ -234,6 +234,31 @@ namespace Hikipuro.Collections {
 			}
 			//*/
 			return index;
+		}
+
+		public int IndexOf(T item, int index) {
+			int i = listIndex.IndexOf(item, index);
+			return i;
+		}
+
+		public int IndexOf(T item, int index, int count) {
+			int i = listIndex.IndexOf(item, index, count);
+			return i;
+		}
+
+		public int LastIndexOf(T item) {
+			int i = listIndex.LastIndexOf(item);
+			return i;
+		}
+
+		public int LastIndexOf(T item, int index) {
+			int i = listIndex.LastIndexOf(item, index);
+			return i;
+		}
+
+		public int LastIndexOf(T item, int index, int count) {
+			int i = listIndex.LastIndexOf(item, index, count);
+			return i;
 		}
 
 		/// <summary>

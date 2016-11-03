@@ -371,6 +371,142 @@ namespace UnitTest {
 		}
 
 		/// <summary>
+		/// 引数 2 個の, IndexOf() 呼び出しテスト.
+		/// </summary>
+		[TestMethod, TestCategory("SpeedyList")]
+		public void IndexOf2() {
+			const int LoopCount = 1000;
+			var list = new List<int>();
+			var speedyList = new SpeedyList<int>();
+			var random = new Random();
+
+			for (int i = 0; i < LoopCount; i++) {
+				int index = random.Next(list.Count);
+				int value = random.Next(LoopCount) + 1;
+				list.Insert(index, value);
+				speedyList.Insert(index, value);
+			}
+			Assert.AreEqual(LoopCount, list.Count);
+			Assert.AreEqual(list.Count, speedyList.Count);
+
+			for (int i = 0; i < LoopCount; i++) {
+				int index = random.Next(list.Count);
+				int index1 = list.IndexOf(i, index);
+				int index2 = speedyList.IndexOf(i, index);
+				Assert.AreEqual(index1, index2);
+			}
+		}
+
+		/// <summary>
+		/// 引数 3 個の, IndexOf() 呼び出しテスト.
+		/// </summary>
+		[TestMethod, TestCategory("SpeedyList")]
+		public void IndexOf3() {
+			const int LoopCount = 1000;
+			var list = new List<int>();
+			var speedyList = new SpeedyList<int>();
+			var random = new Random();
+
+			for (int i = 0; i < LoopCount; i++) {
+				int index = random.Next(list.Count);
+				int value = random.Next(LoopCount) + 1;
+				list.Insert(index, value);
+				speedyList.Insert(index, value);
+			}
+			Assert.AreEqual(LoopCount, list.Count);
+			Assert.AreEqual(list.Count, speedyList.Count);
+
+			for (int i = 0; i < LoopCount; i++) {
+				int index = random.Next(list.Count);
+				int count = random.Next(1, list.Count - index);
+				int index1 = list.IndexOf(i, index, count);
+				int index2 = speedyList.IndexOf(i, index, count);
+				Assert.AreEqual(index1, index2);
+			}
+		}
+
+		/// <summary>
+		/// LastIndexOf() 呼び出しテスト.
+		/// </summary>
+		[TestMethod, TestCategory("SpeedyList")]
+		public void LastIndexOf() {
+			const int LoopCount = 1000;
+			var list = new List<int>();
+			var speedyList = new SpeedyList<int>();
+			var random = new Random();
+
+			for (int i = 0; i < LoopCount; i++) {
+				int index = random.Next(list.Count);
+				int value = random.Next(LoopCount) + 1;
+				list.Insert(index, value);
+				speedyList.Insert(index, value);
+			}
+			Assert.AreEqual(LoopCount, list.Count);
+			Assert.AreEqual(list.Count, speedyList.Count);
+
+			for (int i = 0; i < LoopCount; i++) {
+				int index1 = list.LastIndexOf(i);
+				int index2 = speedyList.LastIndexOf(i);
+				Assert.AreEqual(index1, index2);
+			}
+		}
+
+		/// <summary>
+		/// 引数 2 個の, LastIndexOf() 呼び出しテスト.
+		/// </summary>
+		[TestMethod, TestCategory("SpeedyList")]
+		public void LastIndexOf2() {
+			const int LoopCount = 1000;
+			var list = new List<int>();
+			var speedyList = new SpeedyList<int>();
+			var random = new Random();
+
+			for (int i = 0; i < LoopCount; i++) {
+				int index = random.Next(list.Count);
+				int value = random.Next(LoopCount) + 1;
+				list.Insert(index, value);
+				speedyList.Insert(index, value);
+			}
+			Assert.AreEqual(LoopCount, list.Count);
+			Assert.AreEqual(list.Count, speedyList.Count);
+
+			for (int i = 0; i < LoopCount; i++) {
+				int index = random.Next(list.Count);
+				int index1 = list.LastIndexOf(i, index);
+				int index2 = speedyList.LastIndexOf(i, index);
+				Assert.AreEqual(index1, index2);
+			}
+		}
+
+		/// <summary>
+		/// 引数 3 個の, LastIndexOf() 呼び出しテスト.
+		/// </summary>
+		[TestMethod, TestCategory("SpeedyList")]
+		public void LastIndexOf3() {
+			const int LoopCount = 1000;
+			var list = new List<int>();
+			var speedyList = new SpeedyList<int>();
+			var random = new Random();
+
+			for (int i = 0; i < LoopCount; i++) {
+				int index = random.Next(list.Count);
+				int value = random.Next(LoopCount) + 1;
+				list.Insert(index, value);
+				speedyList.Insert(index, value);
+			}
+			Assert.AreEqual(LoopCount, list.Count);
+			Assert.AreEqual(list.Count, speedyList.Count);
+
+			for (int i = 0; i < LoopCount; i++) {
+				int index = random.Next(1, list.Count);
+				int count = random.Next(1, index);
+				int index1 = list.LastIndexOf(i, index, count);
+				int index2 = speedyList.LastIndexOf(i, index, count);
+				Assert.AreEqual(index1, index2);
+			}
+		}
+
+		/// <summary>
 		/// Insert() 呼び出しテスト.
 		/// </summary>
 		[TestMethod, TestCategory("SpeedyList")]
