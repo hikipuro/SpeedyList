@@ -403,6 +403,16 @@ namespace Hikipuro.Collections {
 			return index;
 		}
 
+		public void RemoveAll(Predicate<T> match) {
+			T[] keys = new T[indices.Count];
+			indices.Keys.CopyTo(keys, 0);
+			foreach (T key in keys) {
+				if (match.Invoke(key)) {
+					Remove(key);
+				}
+			}
+		}
+
 		/// <summary>
 		/// 要素を取り除く.
 		/// </summary>

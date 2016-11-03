@@ -151,6 +151,23 @@ namespace Hikipuro.Collections {
 			listIndex.Add(item, list.Count - 1);
 		}
 
+		public void AddRange(IEnumerable<T> collection) {
+			list.AddRange(collection);
+			listIndex.Refresh();
+		}
+
+		public int BinarySearch(T item) {
+			return list.BinarySearch(item);
+		}
+
+		public int BinarySearch(T item, IComparer<T> comparer) {
+			return list.BinarySearch(item, comparer);
+		}
+
+		public int BinarySearch(int index, int count, T item, IComparer<T> comparer) {
+			return list.BinarySearch(index, count, item, comparer);
+		}
+
 		/// <summary>
 		/// <see cref="T:Hikipuro.Collections.SpeedyList`1"/> からすべての要素を削除します。
 		/// </summary>
@@ -177,6 +194,10 @@ namespace Hikipuro.Collections {
 			return listIndex.Contains(item);
 		}
 
+		public List<TOutput> ConvertAll<TOutput>(Converter<T, TOutput> converter) {
+			return list.ConvertAll(converter);
+		}
+
 		/// <summary>
 		/// <see cref="T:Hikipuro.Collections.SpeedyList`1"/> 
 		/// 全体を互換性のある 1 次元の配列にコピーします。コピー操作は、コピー先の配列の指定したインデックスから始まります。
@@ -188,6 +209,10 @@ namespace Hikipuro.Collections {
 		/// <exception cref="ArgumentException">arrayIndex が array の長さ以上です。 または コピー元の <see cref="T:Hikipuro.Collections.SpeedyList`1"/> の要素数が、arrayIndex からコピー先の array の末尾までに格納できる数を超えています。</exception>
 		public void CopyTo(Array array, int index) {
 			CopyTo((T[])array, index);
+		}
+
+		public void CopyTo(T[] array) {
+			list.CopyTo(array);
 		}
 
 		/// <summary>
@@ -203,12 +228,64 @@ namespace Hikipuro.Collections {
 			list.CopyTo(array, arrayIndex);
 		}
 
+		public void CopyTo(int index, T[] array, int arrayIndex, int count) {
+			list.CopyTo(index, array, arrayIndex, count);
+		}
+
+		public bool Exists(Predicate<T> match) {
+			return list.Exists(match);
+		}
+
+		public T Find(Predicate<T> match) {
+			return list.Find(match);
+		}
+
+		public List<T> FindAll(Predicate<T> match) {
+			return list.FindAll(match);
+		}
+
+		public int FindIndex(Predicate<T> match) { 
+			return list.FindIndex(match);
+		}
+
+		public int FindIndex(int startIndex, Predicate<T> match) {
+			return list.FindIndex(startIndex, match);
+		}
+
+		public int FindIndex(int startIndex, int count, Predicate<T> match) {
+			return list.FindIndex(startIndex, count, match);
+		}
+
+		public T FindLast(Predicate<T> match) {
+			return list.FindLast(match);
+		}
+
+		public int FindLastIndex(Predicate<T> match) {
+			return list.FindLastIndex(match);
+		}
+
+		public int FindLastIndex(int startIndex, Predicate<T> match) {
+			return list.FindLastIndex(startIndex, match);
+		}
+
+		public int FindLastIndex(int startIndex, int count, Predicate<T> match) {
+			return list.FindLastIndex(startIndex, count, match);
+		}
+
+		public void ForEach(Action<T> action) {
+			list.ForEach(action);
+		}
+
 		/// <summary>
 		/// <see cref="T:Hikipuro.Collections.SpeedyList`1"/> を反復処理する列挙子を返します。
 		/// </summary>
 		/// <returns><see cref="T:Hikipuro.Collections.SpeedyList`1"/> の <see cref="T:System.Collections.Generic.List`1.Enumerator"/> 。</returns>
 		public IEnumerator<T> GetEnumerator() {
 			return list.GetEnumerator();
+		}
+
+		public List<T> GetRange(int index, int count) {
+			return list.GetRange(index, count);
 		}
 
 		/// <summary>
@@ -246,21 +323,6 @@ namespace Hikipuro.Collections {
 			return i;
 		}
 
-		public int LastIndexOf(T item) {
-			int i = listIndex.LastIndexOf(item);
-			return i;
-		}
-
-		public int LastIndexOf(T item, int index) {
-			int i = listIndex.LastIndexOf(item, index);
-			return i;
-		}
-
-		public int LastIndexOf(T item, int index, int count) {
-			int i = listIndex.LastIndexOf(item, index, count);
-			return i;
-		}
-
 		/// <summary>
 		/// <see cref="T:Hikipuro.Collections.SpeedyList`1"/> 内の指定したインデックスの位置に要素を挿入します。
 		/// </summary>
@@ -284,6 +346,26 @@ namespace Hikipuro.Collections {
 			} else {
 				listIndex.Insert(index, item);
 			}
+		}
+
+		public void InsertRange(int index, IEnumerable<T> collection) {
+			list.InsertRange(index, collection);
+			listIndex.Refresh();
+		}
+
+		public int LastIndexOf(T item) {
+			int i = listIndex.LastIndexOf(item);
+			return i;
+		}
+
+		public int LastIndexOf(T item, int index) {
+			int i = listIndex.LastIndexOf(item, index);
+			return i;
+		}
+
+		public int LastIndexOf(T item, int index, int count) {
+			int i = listIndex.LastIndexOf(item, index, count);
+			return i;
 		}
 
 		/// <summary>
@@ -323,6 +405,16 @@ namespace Hikipuro.Collections {
 			return true;
 		}
 
+		public int RemoveAll(Predicate<T> match) {
+			int count = list.RemoveAll(match);
+			if (listIndex.HistoryCount > listIndex.HistoryThreshold) {
+				listIndex.Refresh();
+			} else {
+				listIndex.RemoveAll(match);
+			}
+			return count;
+		}
+
 		/// <summary>
 		/// <see cref="T:Hikipuro.Collections.SpeedyList`1"/> の指定したインデックスにある要素を削除します。
 		/// </summary>
@@ -336,6 +428,49 @@ namespace Hikipuro.Collections {
 			} else {
 				listIndex.RemoveAt(item, index);
 			}
+		}
+
+		public void RemoveRange(int index, int count) {
+			list.RemoveRange(index, count);
+			listIndex.Refresh();
+		}
+
+		public void Reverse() {
+			list.Reverse();
+			listIndex.Refresh();
+		}
+
+		public void Reverse(int index, int count) {
+			list.Reverse(index, count);
+			listIndex.Refresh();
+		}
+
+		public void Sort() {
+			list.Sort();
+			listIndex.Refresh();
+		}
+
+		public void Sort(Comparison<T> comparison) {
+			list.Sort(comparison);
+			listIndex.Refresh();
+		}
+
+		public void Sort(IComparer<T> comparer) {
+			list.Sort(comparer);
+			listIndex.Refresh();
+		}
+
+		public void Sort(int index, int count, IComparer<T> comparer) {
+			list.Sort(index, count, comparer);
+			listIndex.Refresh();
+		}
+
+		public T[] ToArray() {
+			return list.ToArray();
+		}
+
+		public bool TrueForAll(Predicate<T> match) {
+			return list.TrueForAll(match);
 		}
 
 		/// <summary>

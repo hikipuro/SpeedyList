@@ -581,6 +581,42 @@ namespace UnitTest {
 		}
 
 		/// <summary>
+		/// RemoveAll() 呼び出しテスト.
+		/// </summary>
+		[TestMethod, TestCategory("SpeedyList")]
+		public void RemoveAll() {
+			const int TestCount = 10;
+			const int LoopCount = 1248;
+			var random = new Random();
+
+			for (int n = 0; n < TestCount; n++) {
+				var list = new List<int>();
+				var speedyList = new SpeedyList<int>();
+
+				for (int i = 0; i < LoopCount; i++) {
+					int index = random.Next(list.Count);
+					list.Insert(index, i);
+					speedyList.Insert(index, i);
+				}
+				Assert.AreEqual(LoopCount, list.Count);
+				Assert.AreEqual(list.Count, speedyList.Count);
+
+				int removeIndex = random.Next(list.Count);
+				int count1 = list.RemoveAll(x => x < removeIndex);
+				int count2 = speedyList.RemoveAll(x => x < removeIndex);
+				Assert.AreEqual(count1, count2);
+				Assert.AreEqual(list.Count, speedyList.Count);
+
+				for (int i = 0; i < list.Count; i++) {
+					Assert.AreEqual(list[i], speedyList[i]);
+					int index1 = list.IndexOf(i);
+					int index2 = speedyList.IndexOf(i);
+					Assert.AreEqual(index1, index2);
+				}
+			}
+		}
+
+		/// <summary>
 		/// RemoveAt() 呼び出しテスト.
 		/// </summary>
 		[TestMethod, TestCategory("SpeedyList")]
@@ -624,6 +660,133 @@ namespace UnitTest {
 					int index1 = list.IndexOf(index);
 					int index2 = speedyList.IndexOf(index);
 					Assert.AreEqual(index1, index2);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Reverse() 呼び出しテスト.
+		/// </summary>
+		[TestMethod, TestCategory("SpeedyList")]
+		public void Reverse() {
+			const int TestCount = 10;
+			const int LoopCount = 1248;
+			var random = new Random();
+
+			for (int n = 0; n < TestCount; n++) {
+				var list = new List<int>();
+				var speedyList = new SpeedyList<int>();
+
+				for (int i = 0; i < LoopCount; i++) {
+					int index = random.Next(list.Count);
+					list.Insert(index, i);
+					speedyList.Insert(index, i);
+				}
+				Assert.AreEqual(LoopCount, list.Count);
+				Assert.AreEqual(list.Count, speedyList.Count);
+
+				list.Reverse();
+				speedyList.Reverse();
+				Assert.AreEqual(list.Count, speedyList.Count);
+
+				for (int i = 0; i < list.Count; i++) {
+					Assert.AreEqual(list[i], speedyList[i]);
+					int index1 = list.IndexOf(i);
+					int index2 = speedyList.IndexOf(i);
+					Assert.AreEqual(index1, index2);
+				}
+			}
+		}
+
+		/// <summary>
+		/// TrueForAll() 呼び出しテスト.
+		/// </summary>
+		[TestMethod, TestCategory("SpeedyList")]
+		public void TrueForAll() {
+			const int TestCount = 1000;
+			const int LoopCount = 1248;
+			var random = new Random();
+
+			var list = new List<int>();
+			var speedyList = new SpeedyList<int>();
+
+			for (int i = 0; i < LoopCount; i++) {
+				int index = random.Next(list.Count);
+				list.Insert(index, i);
+				speedyList.Insert(index, i);
+			}
+			Assert.AreEqual(LoopCount, list.Count);
+			Assert.AreEqual(list.Count, speedyList.Count);
+
+			for (int n = 0; n < TestCount; n++) {
+				int checkIndex = random.Next(list.Count);
+				bool result1 = list.TrueForAll(x => x < checkIndex);
+				bool result2 = speedyList.TrueForAll(x => x < checkIndex);
+				Assert.AreEqual(result1, result2);
+			}
+		}
+
+		/// <summary>
+		/// Sort() 呼び出しテスト.
+		/// </summary>
+		[TestMethod, TestCategory("SpeedyList")]
+		public void Sort() {
+			const int TestCount = 10;
+			const int LoopCount = 1248;
+			var random = new Random();
+
+			for (int n = 0; n < TestCount; n++) {
+				var list = new List<int>();
+				var speedyList = new SpeedyList<int>();
+
+				for (int i = 0; i < LoopCount; i++) {
+					int index = random.Next(list.Count);
+					list.Insert(index, i);
+					speedyList.Insert(index, i);
+				}
+				Assert.AreEqual(LoopCount, list.Count);
+				Assert.AreEqual(list.Count, speedyList.Count);
+
+				list.Sort();
+				speedyList.Sort();
+				Assert.AreEqual(list.Count, speedyList.Count);
+
+				for (int i = 0; i < list.Count; i++) {
+					Assert.AreEqual(list[i], speedyList[i]);
+					int index1 = list.IndexOf(i);
+					int index2 = speedyList.IndexOf(i);
+					Assert.AreEqual(index1, index2);
+				}
+			}
+		}
+
+		/// <summary>
+		/// ToArray() 呼び出しテスト.
+		/// </summary>
+		[TestMethod, TestCategory("SpeedyList")]
+		public void ToArray() {
+			const int TestCount = 10;
+			const int LoopCount = 1248;
+			var random = new Random();
+
+			for (int n = 0; n < TestCount; n++) {
+				var list = new List<int>();
+				var speedyList = new SpeedyList<int>();
+
+				for (int i = 0; i < LoopCount; i++) {
+					int index = random.Next(list.Count);
+					list.Insert(index, i);
+					speedyList.Insert(index, i);
+				}
+				Assert.AreEqual(LoopCount, list.Count);
+				Assert.AreEqual(list.Count, speedyList.Count);
+
+				int[] array1 = list.ToArray();
+				int[] array2 = speedyList.ToArray();
+				Assert.AreEqual(array1.Length, array2.Length);
+
+				for (int i = 0; i < array1.Length; i++) {
+					Assert.AreEqual(array1[i], array2[i]);
 				}
 			}
 		}
